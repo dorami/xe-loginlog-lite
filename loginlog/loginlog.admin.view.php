@@ -87,7 +87,14 @@ class loginlogAdminView extends loginlog
 		Context::set('page_navigation', $output->page_navigation);
 
 		// 템플릿 파일 지정
-		$this->setTemplateFile('index');
+		if(version_compare(__XE_VERSION__, '1.7.0', '>='))
+		{
+			$this->setTemplateFile('index');
+		}
+		else
+		{
+			$this->setTemplateFile('index_daol');
+		}
 	}
 
 	function dispLoginlogAdminSetting()
@@ -97,12 +104,26 @@ class loginlogAdminView extends loginlog
 
 		Context::set('config', $config);
 
-		$this->setTemplateFile('setting');
+		if(version_compare(__XE_VERSION__, '1.7.0', '>='))
+		{
+			$this->setTemplateFile('setting');
+		}
+		else
+		{
+			$this->setTemplateFile('setting_daol');
+		}		
 	}
 
 	function dispLoginlogAdminArrange()
 	{
-		$this->setTemplateFile('arrange');
+		if(version_compare(__XE_VERSION__, '1.7.0', '>='))
+		{
+			$this->setTemplateFile('arrange');
+		}
+		else
+		{
+			$this->setTemplateFile('arrange_daol');
+		}
 	}
 }
 
