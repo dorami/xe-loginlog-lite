@@ -1,7 +1,7 @@
 <?php
 /**
  * @class loginlog
- * @author 퍼니엑스이 (admin@funnyxe.com)
+ * @author 퍼니엑스이 (contact@funnyxe.com)
  * @brief loginlog 모듈의 high class
  **/
 
@@ -12,7 +12,7 @@ class loginlog extends ModuleObject
 	 */
 	function moduleInstall()
 	{
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		$oModuleController->insertTrigger('member.doLogin', 'loginlog', 'controller', 'triggerAfterLogin', 'after');
 
 		// 회원 삭제 시 로그인 기록을 삭제하는 트리거 추가 (2010.06.09)
@@ -29,8 +29,8 @@ class loginlog extends ModuleObject
 	 */
 	function moduleUninstall()
 	{
-		$oModuleModel = &getModel('module');
-		$oModuleController = &getController('module');
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
 
 		// 트리거 삭제
 		if($oModuleModel->getTrigger('member.doLogin', 'loginlog', 'controller', 'triggerAfterLogin', 'after'))
@@ -58,7 +58,7 @@ class loginlog extends ModuleObject
 	 **/
 	function checkUpdate()
 	{
-		$oModuleModel = &getModel('module');
+		$oModuleModel = getModel('module');
 
 		//회원 삭제 시 로그인 기록을 삭제하는 트리거 추가 (2010.06.09)
 		if(!$oModuleModel->getTrigger('member.deleteMember', 'loginlog', 'controller', 'triggerDeleteMember', 'after'))
@@ -72,8 +72,14 @@ class loginlog extends ModuleObject
 			return true;
 		}
 
+		// 회원 로그인 성공 시 로그인 기록을 남기는 트리거 추가 (2014.10.05)
+		if(!$oModuleModel->getTrigger('member.doLogin', 'loginlog', 'controller', 'triggerAfterLogin', 'after'))
+		{
+			return true;
+		}
+
 		// 로그인 성공 여부를 기록하는 is_succeed 칼럼 추가 (2010.09.13)
-		$oDB = &DB::getInstance();
+		$oDB = DB::getInstance();
 		if(!$oDB->isColumnExists('member_loginlog', 'is_succeed'))
 		{
 			return true;
@@ -87,8 +93,8 @@ class loginlog extends ModuleObject
 	 **/
 	function moduleUpdate()
 	{
-		$oModuleModel = &getModel('module');
-		$oModuleController = &getController('module');
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
 
 		if(!$oModuleModel->getTrigger('member.deleteMember', 'loginlog', 'controller', 'triggerDeleteMember', 'after'))
 		{
@@ -101,8 +107,14 @@ class loginlog extends ModuleObject
 			$oModuleController->insertTrigger('member.doLogin', 'loginlog', 'controller', 'triggerBeforeLogin', 'before');
 		}
 
+		// 회원 로그인 성공 시 로그인 기록을 남기는 트리거 추가 (2014.10.05)
+		if(!$oModuleModel->getTrigger('member.doLogin', 'loginlog', 'controller', 'triggerAfterLogin', 'after'))
+		{
+			$oModuleController->insertTrigger('member.doLogin', 'loginlog', 'controller', 'triggerAfterLogin', 'after');
+		}
+
 		// 로그인 성공 여부를 기록하는 is_succeed 칼럼 추가 (2010.09.13)
-		$oDB = &DB::getInstance();
+		$oDB = DB::getInstance();
 		if(!$oDB->isColumnExists('member_loginlog', 'is_succeed'))
 		{
 			$oDB->addColumn('member_loginlog', 'is_succeed', 'char', 1, 'Y', true);

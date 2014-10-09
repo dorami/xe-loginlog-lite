@@ -57,6 +57,7 @@ class loginlogController extends loginlog
 		}
 
 		// 비밀번호가 틀렸다면 기록
+		$args = new stdClass;
 		$args->member_srl = $output->data->member_srl;
 		$args->ipaddress = $_SERVER['REMOTE_ADDR'];
 		$args->is_succeed = 'N';
@@ -86,6 +87,7 @@ class loginlogController extends loginlog
 		if($config->admin_user_log != 'Y' && $member_info->is_admin == 'Y') return new Object();
 
 		// 로그인 기록을 남깁니다
+		$args = new stdClass;
 		$args->member_srl = $member_srl;
 		$args->ipaddress = $_SERVER['REMOTE_ADDR'];
 		$args->is_succeed = 'Y';

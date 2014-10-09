@@ -15,21 +15,16 @@ class loginlogAdminController extends loginlog {
 	/**
 	 * @brief 설정 저장
 	 */
-	function procLoginlogAdminInsertConfig() {
-		$oLoginlogModel = &getModel('loginlog');
+	function procLoginlogAdminInsertConfig()
+	{
+		$oLoginlogModel = getModel('loginlog');
 		$config = $oLoginlogModel->getModuleConfig();
 
 		$config = Context::gets('delete_logs', 'admin_user_log');
 		if(!$config->delete_logs) $config->delete_logs = 'N';
 		if(!$config->admin_user_log) $config->admin_user_log = 'N';
 
-		unset($config->body);
-		unset($config->_filter);
-		unset($config->error_return_url);
-		unset($config->act);
-		unset($config->module);
-
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		$oModuleController->insertModuleConfig('loginlog', $config);
 
 		$this->setMessage('success_saved');
@@ -40,26 +35,24 @@ class loginlogAdminController extends loginlog {
 	 */
 	function procLoginlogAdminSaveListSetting()
 	{
-		$oLoginlogModel = &getModel('loginlog');
+		$oLoginlogModel = getModel('loginlog');
 		$config = $oLoginlogModel->getModuleConfig();
-
-		unset($config->body);
-		unset($config->_filter);
-		unset($config->error_return_url);
-		unset($config->act);
-		unset($config->module);
 
 		$config->listSetting = explode('|@|', Context::get('listsetting'));
 
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		$oModuleController->insertModuleConfig('loginlog', $config);
 
 		$this->setMessage('success_saved');
 	}
+
 	/**
 	 * @brief 기록 초기화
 	 */
-	function procLoginlogAdminInitLogs() {
+	function procLoginlogAdminInitLogs()
+	{
+		$args = new stdClass;
+
 		if(Context::get('expire_date'))
 		{
 			$args->expire_date = Context::get('expire_date');

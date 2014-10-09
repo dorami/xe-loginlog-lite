@@ -22,10 +22,20 @@ class loginlogModel extends loginlog
 		static $config = null;
 		if(is_null($config))
 		{
-			$oModuleModel = &getModel('module');
+			$oModuleModel = getModel('module');
 			$config = $oModuleModel->getModuleConfig('loginlog');
+			if(!$config)
+			{
+				$config = new stdClass;
+			}
 
 			if(!$config->admin_user_log) $config->admin_user_log = 'N';
+
+			unset($config->body);
+			unset($config->_filter);
+			unset($config->error_return_url);
+			unset($config->act);
+			unset($config->module);
 		}
 
 		return $config;
